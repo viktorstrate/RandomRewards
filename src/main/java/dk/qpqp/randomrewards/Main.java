@@ -45,24 +45,25 @@ public final class Main extends JavaPlugin {
         randomItemsData = new HashMap<Integer, Byte>();
         Set<String> keys = plugin.getConfig().getKeys(true);
 		for(String str: keys){
-			Message.log(str, plugin);
 			
-			if(str.contains("rewards.items.")){
-				Message.log("YO", plugin);
+			if(str.startsWith("rewards.items.")){
 				
 				for(Material mat: Material.values()){
 					
-					if(str.matches("rewards.items."+mat.name())){
-						Message.log("MEGA YO "+mat.name(), plugin);
+					if( str.endsWith(mat.name()) ){
+						Message.log("Found item: "+mat.name()+" in config!", plugin);
 						randomItems.put(randomItems.size(), mat);
-					}
-					
-					for(String strData: keys){
-						if(strData.matches("rewards.items."+mat.name()+".data")){
-							Message.log("MEGA YO DATA "+strData, plugin);
+						if(plugin.getConfig().get("rewards.items."+mat.name()+".data")!=null){
+							Message.log("-  Found data to item", plugin);
+						} else {
+							Message.log("-  didn't find data for item", plugin);
+						}
+						if(plugin.getConfig().get("rewards.items."+mat.name()+".amount")!=null){
+							Message.log("-  Found amount of items", plugin);
+						} else {
+							Message.log("-  didn't find the amount of items", plugin);
 						}
 					}
-					
 					
 				}
 			}
