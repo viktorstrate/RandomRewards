@@ -1,8 +1,5 @@
 package dk.qpqp.randomrewards;
 
-import java.util.List;
-import java.util.Set;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -22,14 +19,21 @@ public class Listener implements org.bukkit.event.Listener {
 		plugin = main.plugin;
 	}
 	
-	@SuppressWarnings({ "deprecation", "unchecked" })
+	@SuppressWarnings({ "deprecation" })
 	@EventHandler
 	public void onInteract(PlayerInteractEvent event){
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
 			
 			Block block = event.getClickedBlock();
 			if(block.getType()==Material.WOOL&&block.getData()==7){
-				Material randomMaterial = main.randomItems.get(Math.random()*main.randomItems.size());
+				int randomId = (int) (Math.random()*main.randomItems.size());
+				Material randomMaterial = main.randomItems.get(randomId);
+				ItemStack randomItem = new ItemStack(randomMaterial);
+				randomItem.setData(new MaterialData(main.randomItemsData.get(randomId)));
+				randomItem.setAmount(main.randomItemsAmount.get(randomId));
+				event.getPlayer().getInventory().addItem(randomItem);
+				event.getPlayer().updateInventory();
+				Message.playerMessage("Got a "+randomMaterial.name()+" and randomid: "+randomId+", and amount of items: "+main.randomItems.size(), event.getPlayer(), plugin);
 			}
 		}
 	}
