@@ -1,8 +1,7 @@
 rewards:
   items:
     DIAMOND_SWORD:
-        data: 0
-        amount: 1
     DIAMOND_HELMET:
-        data: 2
-        amount: 3
+    WOOL:
+        data: 1
+        amount: 1

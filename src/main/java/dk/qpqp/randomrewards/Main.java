@@ -23,7 +23,7 @@ public final class Main extends JavaPlugin {
 	
 	public HashMap<Integer, Material> randomItems;
 	public HashMap<Integer, Integer> randomItemsAmount;
-	public HashMap<Integer, Integer> randomItemsData;
+	public HashMap<Integer, Short> randomItemsData;
 	
 	public void onEnable() {
         getServer().getPluginManager().registerEvents(new Listener(this), this);
@@ -42,7 +42,7 @@ public final class Main extends JavaPlugin {
         // Find the random items from the config
         randomItems = new HashMap<Integer, Material>();
         randomItemsAmount = new HashMap<Integer, Integer>();
-        randomItemsData = new HashMap<Integer, Integer>();
+        randomItemsData = new HashMap<Integer, Short>();
         Set<String> keys = plugin.getConfig().getKeys(true);
 		for(String str: keys){
 			
@@ -51,19 +51,13 @@ public final class Main extends JavaPlugin {
 				for(Material mat: Material.values()){
 					
 					if( str.endsWith(mat.name()) ){
-						Message.log("Found item: "+mat.name()+" in config!", plugin);
+						Message.log("Found reward item: "+mat.name()+" in config!", plugin);
 						randomItems.put(randomItems.size(), mat);
 						if(plugin.getConfig().get("rewards.items."+mat.name()+".data")!=null){
-							Message.log("-  Found data to item", plugin);
-							randomItemsData.put(randomItems.size()-1, plugin.getConfig().getInt("rewards.items."+mat.name()+".data") );
-						} else {
-							Message.log("-  didn't find data for item", plugin);
+							randomItemsData.put(randomItems.size()-1, (short) plugin.getConfig().getInt("rewards.items."+mat.name()+".data") );
 						}
 						if(plugin.getConfig().get("rewards.items."+mat.name()+".amount")!=null){
-							Message.log("-  Found amount of items", plugin);
 							randomItemsAmount.put(randomItems.size()-1, plugin.getConfig().getInt("rewards.items."+mat.name()+".amount"));
-						} else {
-							Message.log("-  didn't find the amount of items", plugin);
 						}
 					}
 					

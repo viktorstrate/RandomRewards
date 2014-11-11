@@ -12,6 +12,6 @@ public class Message {
 		plugin.getLogger().info(message);
 	}
 	public static void playerMessage(String message, Player player, Plugin plugin){
-		player.sendMessage(pluginTag+" "+message);
+		player.sendMessage(pluginTag+" "+ChatColor.WHITE+message);
 	}
 }
