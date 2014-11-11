@@ -1,7 +1,15 @@
 rewards:
   items:
     DIAMOND_SWORD:
+      amount: 1
+      data: 0
     DIAMOND_HELMET:
+      amount: 1
+      data: 0
     WOOL:
-        data: 1
-        amount: 1
+      data: 2
+      amount: 1
+prize:
+  items:
+    GOLD_INGOT:
+      amount: 3
