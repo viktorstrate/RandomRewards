@@ -39,6 +39,7 @@ public class ConfigSetup {
 	
 	private void firstRun() throws Exception {
 		if(!configFile.exists()){
+			Message.log("Config not found creating one...", plugin);
 	        configFile.getParentFile().mkdirs();
 	        copy(plugin.getResource("config.yml"), configFile);
 	    }

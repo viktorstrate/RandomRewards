@@ -1,3 +1,4 @@
+# The rewards the player should be able to get.
 rewards:
   items:
     DIAMOND_SWORD:
@@ -9,11 +10,13 @@ rewards:
     WOOL:
       data: 2
       amount: 1
+# The price it costs every time the player right-clicks the reward block
 price:
   items:
     GOLD_INGOT:
       amount: 3
       data: 0
+# The block the player has to right-click to trigger the reward
 rewardBlock:
   WOOL:
       data: 2

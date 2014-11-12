@@ -1,7 +1,5 @@
 package dk.qpqp.randomrewards;
 
-import java.util.HashMap;
-
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
