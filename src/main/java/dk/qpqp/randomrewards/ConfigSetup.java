@@ -11,6 +11,9 @@ import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 
 public class ConfigSetup {
+	
+	// This file creates and loads the config.yml file
+	
 	private File configFile;
 	private Plugin plugin;
 	

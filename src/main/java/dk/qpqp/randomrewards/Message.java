@@ -6,6 +6,8 @@ import org.bukkit.plugin.Plugin;
 
 public class Message {
 	
+	// This file is used to send messages to players, or log to the console.
+	
 	private static String pluginTag = ChatColor.GREEN+"[RandomRewards]";
 	
 	public static void log(String message, Plugin plugin){

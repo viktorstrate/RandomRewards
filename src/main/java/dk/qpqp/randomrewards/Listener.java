@@ -10,6 +10,8 @@ import org.bukkit.plugin.Plugin;
 
 public class Listener implements org.bukkit.event.Listener {
 	
+	// This file detects events like when a player right-clicks on a block.
+	
 	Main main;
 	Plugin plugin;
 	
