@@ -1,8 +1,7 @@
 RandomRewards
 =============
 
-A minecraft plugin, to give random rewards by rightclicking on a specefic block
+A minecraft plugin, to give random rewards by rightclicking on specefic blocks
+Check the wiki for more info https://github.com/viktorstrate/RandomRewards/wiki
 
-Rightclick a special piston (35:7)
-
-GNU General Public License v3 (GPL-3)
+<i>GNU General Public License v3 (GPL-3)</i>
