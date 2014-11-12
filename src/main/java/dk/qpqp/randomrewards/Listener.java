@@ -22,15 +22,16 @@ public class Listener implements org.bukkit.event.Listener {
 		plugin = main.plugin;
 	}
 	
-	@SuppressWarnings({ "deprecation" })
+	@SuppressWarnings( "deprecation" )
 	@EventHandler
 	public void onInteract(PlayerInteractEvent event){
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
 			
+			// Checks if the block is identical to the block "rewardBlock" in the config.yml
 			Block block = event.getClickedBlock();
-			if(block.getType()==Material.WOOL&&block.getData()==7){
+			if( block.getType()==main.configSetup.getRewardBlock().itemsType && block.getData()==main.configSetup.getRewardBlock().itemsData ){
 				HashMap<Integer, ConfigItem> rewards;
-				rewards = main.rewards;
+				rewards = main.configSetup.getRewards();
 				
 				int randomId = (int) (Math.random()*rewards.size());
 				Material randomMaterial = rewards.get(randomId).itemsType;

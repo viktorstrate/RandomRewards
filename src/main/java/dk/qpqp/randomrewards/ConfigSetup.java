@@ -17,15 +17,16 @@ public class ConfigSetup {
 	private File configFile;
 	private Plugin plugin;
 	
-	private HashMap<Integer, ConfigItem> rewards;
-	private HashMap<Integer, ConfigItem> prices;
+	private HashMap<Integer, ConfigItem> rewards, prices;
+	private ConfigItem rewardBlock;
 	
 	public ConfigSetup(Plugin plugin){
 		this.plugin = plugin;
 		configFile = new File(plugin.getDataFolder(), "config.yml");
         
-        rewards = loadItem("rewards.items");
-        prices = loadItem("price.items");
+        rewards = loadItems("rewards.items");
+        prices = loadItems("price.items");
+        rewardBlock = loadItem("rewardBlock");
         
         // Creates the config if it doesn't exists
         try{
@@ -58,7 +59,7 @@ public class ConfigSetup {
 	    }
 	}
 	
-	public HashMap<Integer, ConfigItem> loadItem(String pathToItems){
+	public HashMap<Integer, ConfigItem> loadItems(String pathToItems){
 		// Loads items from the config
 		HashMap<Integer, Material> items = new HashMap<Integer, Material>();
 		HashMap<Integer, Integer> itemsAmount = new HashMap<Integer, Integer>();
@@ -94,6 +95,79 @@ public class ConfigSetup {
 		
 		return configItems;
 	}
+	
+	public ConfigItem loadItem(String pathToItem){
+		// Loads items from the config
+		Material item = Material.STICK;
+		int itemAmount = -1;
+		Short itemData = 0;
+        Set<String> keys = plugin.getConfig().getKeys(true);
+		for(String str: keys){
+			
+			if(str.startsWith(pathToItem+".")){
+				
+				for(Material mat: Material.values()){
+					
+					if( str.endsWith(mat.name()) ){
+						item = mat;
+						
+						if(plugin.getConfig().get(pathToItem+"."+mat.name()+".data")!=null){
+							itemData = (short) plugin.getConfig().getInt(pathToItem+"."+mat.name()+".data");
+						}
+						
+						if(plugin.getConfig().get(pathToItem+"."+mat.name()+".amount")!=null){
+							itemAmount = plugin.getConfig().getInt(pathToItem+"."+mat.name()+".amount");
+						}
+					}
+					
+				}
+				break;
+			}
+		}
+		
+		if(itemAmount<=0){
+			Message.log("Item "+pathToItem+" loaded", plugin);
+			return new ConfigItem(item, itemAmount, itemData);
+		} else {
+			Message.warning("Item "+pathToItem+" didn't load correctly, check the config", plugin);
+			return null;
+		}
+		
+	}
+	
+	public ConfigItem loadBlock(String pathToBlock){
+		// Loads items from the config
+		Material item = Material.STONE;
+		Short itemData = -1;
+        Set<String> keys = plugin.getConfig().getKeys(true);
+		for(String str: keys){
+			
+			if(str.startsWith(pathToBlock+".")){
+				
+				for(Material mat: Material.values()){
+					
+					if( str.endsWith(mat.name()) ){
+						item = mat;
+						
+						if(plugin.getConfig().get(pathToBlock+"."+mat.name()+".data")!=null){
+							itemData = (short) plugin.getConfig().getInt(pathToBlock+"."+mat.name()+".data");
+						}
+					}
+					
+				}
+				break;
+			}
+		}
+		if(itemData>=0){
+			Message.log("Block "+pathToBlock+" loaded", plugin);
+			return new ConfigItem(item, 1, itemData);
+		} else {
+			Message.warning("Block "+pathToBlock+" didn't load correctly, check the config", plugin);
+			return null;
+		}
+		
+		
+	}
 
 	public HashMap<Integer, ConfigItem> getRewards() {
 		return rewards;
@@ -103,4 +177,7 @@ public class ConfigSetup {
 		return prices;
 	}
 	
+	public ConfigItem getRewardBlock(){
+		return rewardBlock;
+	}
 }

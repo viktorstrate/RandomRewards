@@ -15,16 +15,11 @@ public final class Main extends JavaPlugin {
 	
 	public ConfigSetup configSetup;
 	
-	public HashMap<Integer, ConfigItem> rewards, prices;
-	
 	public void onEnable() {
         getServer().getPluginManager().registerEvents(new Listener(this), this);
         getLogger().info(pdf.getName()+" v. "+pdf.getVersion()+" has been enabled!");
         
         configSetup = new ConfigSetup(plugin);
-        
-        rewards = configSetup.getRewards();
-        prices = configSetup.getPrices();
         
     }
 	

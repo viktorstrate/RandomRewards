@@ -13,6 +13,11 @@ public class Message {
 	public static void log(String message, Plugin plugin){
 		plugin.getLogger().info(message);
 	}
+	
+	public static void warning(String message, Plugin plugin){
+		plugin.getLogger().warning(message);
+	}
+	
 	public static void playerMessage(String message, Player player, Plugin plugin){
 		player.sendMessage(pluginTag+" "+ChatColor.WHITE+message);
 	}
