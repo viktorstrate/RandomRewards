@@ -1,5 +1,7 @@
 package dk.qpqp.randomrewards;
 
+import java.util.HashMap;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -27,15 +29,15 @@ public class Listener implements org.bukkit.event.Listener {
 			
 			Block block = event.getClickedBlock();
 			if(block.getType()==Material.WOOL&&block.getData()==7){
-				ItemList rewards;
+				HashMap<Integer, ConfigItem> rewards;
 				rewards = main.rewards;
 				
-				int randomId = (int) (Math.random()*rewards.itemsType.size());
-				Material randomMaterial = rewards.itemsType.get(randomId);
-				ItemStack randomItem = new ItemStack(randomMaterial, rewards.itemsAmount.get(randomId), (short) rewards.itemsData.get(randomId));
+				int randomId = (int) (Math.random()*rewards.size());
+				Material randomMaterial = rewards.get(randomId).itemsType;
+				ItemStack randomItem = new ItemStack(randomMaterial, rewards.get(randomId).itemsAmount, (short) rewards.get(randomId).itemsData);
 				event.getPlayer().getInventory().addItem(randomItem);
 				event.getPlayer().updateInventory();
-				Message.playerMessage("Got a "+randomMaterial.name()+" and randomid: "+randomId+", and amount of items: "+rewards.itemsType.size(), event.getPlayer(), plugin);
+				Message.playerMessage("Got a "+randomMaterial.name()+" and randomid: "+randomId+", and amount of items: "+rewards.size(), event.getPlayer(), plugin);
 			}
 		}
 	}

@@ -1,5 +1,7 @@
 package dk.qpqp.randomrewards;
 
+import java.util.HashMap;
+
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,7 +15,7 @@ public final class Main extends JavaPlugin {
 	
 	public ConfigSetup configSetup;
 	
-	public ItemList rewards, prices;
+	public HashMap<Integer, ConfigItem> rewards, prices;
 	
 	public void onEnable() {
         getServer().getPluginManager().registerEvents(new Listener(this), this);

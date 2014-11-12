@@ -17,8 +17,8 @@ public class ConfigSetup {
 	private File configFile;
 	private Plugin plugin;
 	
-	private ItemList rewards;
-	private ItemList prices;
+	private HashMap<Integer, ConfigItem> rewards;
+	private HashMap<Integer, ConfigItem> prices;
 	
 	public ConfigSetup(Plugin plugin){
 		this.plugin = plugin;
@@ -58,7 +58,7 @@ public class ConfigSetup {
 	    }
 	}
 	
-	public ItemList loadItem(String pathToItems){
+	public HashMap<Integer, ConfigItem> loadItem(String pathToItems){
 		// Loads items from the config
 		HashMap<Integer, Material> items = new HashMap<Integer, Material>();
 		HashMap<Integer, Integer> itemsAmount = new HashMap<Integer, Integer>();
@@ -87,14 +87,19 @@ public class ConfigSetup {
 			}
 		}
 		
-		return new ItemList(items, itemsAmount, itemsData);
+		HashMap<Integer, ConfigItem> configItems = new HashMap<Integer, ConfigItem>();
+		for(int i = 0; i<items.size(); i++){
+			configItems.put(i, new ConfigItem(items.get(i), itemsAmount.get(i), itemsData.get(i)));
+		}
+		
+		return configItems;
 	}
 
-	public ItemList getRewards() {
+	public HashMap<Integer, ConfigItem> getRewards() {
 		return rewards;
 	}
 
-	public ItemList getPrices() {
+	public HashMap<Integer, ConfigItem> getPrices() {
 		return prices;
 	}
 	
