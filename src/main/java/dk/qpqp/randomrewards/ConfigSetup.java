@@ -24,16 +24,16 @@ public class ConfigSetup {
 		this.plugin = plugin;
 		configFile = new File(plugin.getDataFolder(), "config.yml");
         
-        rewards = loadItems("rewards.items");
-        prices = loadItems("price.items");
-        rewardBlock = loadItem("rewardBlock");
-        
         // Creates the config if it doesn't exists
         try{
         	firstRun();
         } catch (Exception e){
         	e.printStackTrace();
         }
+        
+        rewards = loadItems("rewards.items");
+        prices = loadItems("price.items");
+        rewardBlock = loadItem("rewardBlock");
         
 	}
 	

@@ -15,4 +15,5 @@ price:
       amount: 3
       data: 0
 rewardBlock:
-  
+  WOOL:
+      data: 2
