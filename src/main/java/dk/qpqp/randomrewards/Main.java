@@ -1,7 +1,5 @@
 package dk.qpqp.randomrewards;
 
-import java.util.HashMap;
-import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,9 +10,7 @@ public final class Main extends JavaPlugin {
 	
 	public ConfigSetup configSetup;
 	
-	public HashMap<Integer, Material> randomItems;
-	public HashMap<Integer, Integer> randomItemsAmount;
-	public HashMap<Integer, Short> randomItemsData;
+	public ItemList rewards, prices;
 	
 	public void onEnable() {
         getServer().getPluginManager().registerEvents(new Listener(this), this);
@@ -22,9 +18,8 @@ public final class Main extends JavaPlugin {
         
         configSetup = new ConfigSetup(plugin);
         
-        randomItems = configSetup.getRandomItems();
-        randomItemsAmount = configSetup.getRandomItemsAmount();
-        randomItemsData = configSetup.getRandomItemsData();
+        rewards = configSetup.getRewards();
+        prices = configSetup.getPrices();
         
     }
 	

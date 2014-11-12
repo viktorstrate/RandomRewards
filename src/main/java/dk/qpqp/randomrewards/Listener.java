@@ -25,12 +25,15 @@ public class Listener implements org.bukkit.event.Listener {
 			
 			Block block = event.getClickedBlock();
 			if(block.getType()==Material.WOOL&&block.getData()==7){
-				int randomId = (int) (Math.random()*main.randomItems.size());
-				Material randomMaterial = main.randomItems.get(randomId);
-				ItemStack randomItem = new ItemStack(randomMaterial, main.randomItemsAmount.get(randomId), (short) main.randomItemsData.get(randomId));
+				ItemList rewards;
+				rewards = main.rewards;
+				
+				int randomId = (int) (Math.random()*rewards.itemsType.size());
+				Material randomMaterial = rewards.itemsType.get(randomId);
+				ItemStack randomItem = new ItemStack(randomMaterial, rewards.itemsAmount.get(randomId), (short) rewards.itemsData.get(randomId));
 				event.getPlayer().getInventory().addItem(randomItem);
 				event.getPlayer().updateInventory();
-				Message.playerMessage("Got a "+randomMaterial.name()+" and randomid: "+randomId+", and amount of items: "+main.randomItems.size(), event.getPlayer(), plugin);
+				Message.playerMessage("Got a "+randomMaterial.name()+" and randomid: "+randomId+", and amount of items: "+rewards.itemsType.size(), event.getPlayer(), plugin);
 			}
 		}
 	}

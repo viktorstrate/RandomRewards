@@ -9,7 +9,7 @@ rewards:
     WOOL:
       data: 2
       amount: 1
-prize:
+price:
   items:
     GOLD_INGOT:
       amount: 3

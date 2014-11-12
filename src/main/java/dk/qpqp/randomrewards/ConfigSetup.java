@@ -14,15 +14,15 @@ public class ConfigSetup {
 	private File configFile;
 	private Plugin plugin;
 	
-	private HashMap<Integer, Material> randomItems;
-	private HashMap<Integer, Integer> randomItemsAmount;
-	private HashMap<Integer, Short> randomItemsData;
+	private ItemList rewards;
+	private ItemList prices;
 	
 	public ConfigSetup(Plugin plugin){
 		this.plugin = plugin;
 		configFile = new File(plugin.getDataFolder(), "config.yml");
         
         loadRewards();
+        loadprice();
         
         // Creates the config if it doesn't exists
         try{
@@ -57,9 +57,10 @@ public class ConfigSetup {
 	
 	private void loadRewards(){
 		// Find the random items from the config
-        randomItems = new HashMap<Integer, Material>();
-        randomItemsAmount = new HashMap<Integer, Integer>();
-        randomItemsData = new HashMap<Integer, Short>();
+		HashMap<Integer, Material> randomItems = new HashMap<Integer, Material>();
+		HashMap<Integer, Integer> randomItemsAmount = new HashMap<Integer, Integer>();
+		HashMap<Integer, Short> randomItemsData = new HashMap<Integer, Short>();
+        
         Set<String> keys = plugin.getConfig().getKeys(true);
 		for(String str: keys){
 			
@@ -81,18 +82,48 @@ public class ConfigSetup {
 				}
 			}
 		}
+		
+		rewards = new ItemList(randomItems, randomItemsAmount, randomItemsData);
 	}
 	
-	// Getters for the hashmaps
-	public HashMap<Integer, Material> getRandomItems() {
-		return randomItems;
+	private void loadprice(){
+		// Find the random items from the config
+		HashMap<Integer, Material> priceItems = new HashMap<Integer, Material>();
+		HashMap<Integer, Integer> priceItemsAmount = new HashMap<Integer, Integer>();
+		HashMap<Integer, Short> priceItemsData = new HashMap<Integer, Short>();
+        Set<String> keys = plugin.getConfig().getKeys(true);
+		for(String str: keys){
+			
+			if(str.startsWith("price.items.")){
+				
+				for(Material mat: Material.values()){
+					
+					if( str.endsWith(mat.name()) ){
+						Message.log("Found price item: "+mat.name()+" in config!", plugin);
+						priceItems.put(priceItems.size(), mat);
+						
+						if(plugin.getConfig().get("price.items."+mat.name()+".data")!=null){
+							priceItemsData.put(priceItems.size()-1, (short) plugin.getConfig().getInt("price.items."+mat.name()+".data") );
+						}
+						
+						if(plugin.getConfig().get("rewards.items."+mat.name()+".amount")!=null){
+							priceItemsAmount.put(priceItems.size()-1, plugin.getConfig().getInt("price.items."+mat.name()+".amount"));
+						}
+					}
+					
+				}
+			}
+		}
+		
+		prices = new ItemList(priceItems, priceItemsAmount, priceItemsData);
 	}
 
-	public HashMap<Integer, Integer> getRandomItemsAmount() {
-		return randomItemsAmount;
+	public ItemList getRewards() {
+		return rewards;
 	}
 
-	public HashMap<Integer, Short> getRandomItemsData() {
-		return randomItemsData;
+	public ItemList getPrices() {
+		return prices;
 	}
+	
 }
