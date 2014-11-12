@@ -24,8 +24,8 @@ public class ConfigSetup {
 		this.plugin = plugin;
 		configFile = new File(plugin.getDataFolder(), "config.yml");
         
-        loadRewards();
-        loadprice();
+        rewards = loadItem("rewards.items");
+        prices = loadItem("price.items");
         
         // Creates the config if it doesn't exists
         try{
@@ -58,27 +58,28 @@ public class ConfigSetup {
 	    }
 	}
 	
-	private void loadRewards(){
-		// Find the random items from the config
-		HashMap<Integer, Material> randomItems = new HashMap<Integer, Material>();
-		HashMap<Integer, Integer> randomItemsAmount = new HashMap<Integer, Integer>();
-		HashMap<Integer, Short> randomItemsData = new HashMap<Integer, Short>();
-        
+	public ItemList loadItem(String pathToItems){
+		// Loads items from the config
+		HashMap<Integer, Material> items = new HashMap<Integer, Material>();
+		HashMap<Integer, Integer> itemsAmount = new HashMap<Integer, Integer>();
+		HashMap<Integer, Short> itemsData = new HashMap<Integer, Short>();
         Set<String> keys = plugin.getConfig().getKeys(true);
 		for(String str: keys){
 			
-			if(str.startsWith("rewards.items.")){
+			if(str.startsWith(pathToItems+".")){
 				
 				for(Material mat: Material.values()){
 					
 					if( str.endsWith(mat.name()) ){
-						Message.log("Found reward item: "+mat.name()+" in config!", plugin);
-						randomItems.put(randomItems.size(), mat);
-						if(plugin.getConfig().get("rewards.items."+mat.name()+".data")!=null){
-							randomItemsData.put(randomItems.size()-1, (short) plugin.getConfig().getInt("rewards.items."+mat.name()+".data") );
+						Message.log("Found "+pathToItems+": "+mat.name()+" in config!", plugin);
+						items.put(items.size(), mat);
+						
+						if(plugin.getConfig().get(pathToItems+"."+mat.name()+".data")!=null){
+							itemsData.put(items.size()-1, (short) plugin.getConfig().getInt(pathToItems+"."+mat.name()+".data") );
 						}
-						if(plugin.getConfig().get("rewards.items."+mat.name()+".amount")!=null){
-							randomItemsAmount.put(randomItems.size()-1, plugin.getConfig().getInt("rewards.items."+mat.name()+".amount"));
+						
+						if(plugin.getConfig().get(pathToItems+"."+mat.name()+".amount")!=null){
+							itemsAmount.put(items.size()-1, plugin.getConfig().getInt(pathToItems+"."+mat.name()+".amount"));
 						}
 					}
 					
@@ -86,39 +87,7 @@ public class ConfigSetup {
 			}
 		}
 		
-		rewards = new ItemList(randomItems, randomItemsAmount, randomItemsData);
-	}
-	
-	private void loadprice(){
-		// Find the random items from the config
-		HashMap<Integer, Material> priceItems = new HashMap<Integer, Material>();
-		HashMap<Integer, Integer> priceItemsAmount = new HashMap<Integer, Integer>();
-		HashMap<Integer, Short> priceItemsData = new HashMap<Integer, Short>();
-        Set<String> keys = plugin.getConfig().getKeys(true);
-		for(String str: keys){
-			
-			if(str.startsWith("price.items.")){
-				
-				for(Material mat: Material.values()){
-					
-					if( str.endsWith(mat.name()) ){
-						Message.log("Found price item: "+mat.name()+" in config!", plugin);
-						priceItems.put(priceItems.size(), mat);
-						
-						if(plugin.getConfig().get("price.items."+mat.name()+".data")!=null){
-							priceItemsData.put(priceItems.size()-1, (short) plugin.getConfig().getInt("price.items."+mat.name()+".data") );
-						}
-						
-						if(plugin.getConfig().get("rewards.items."+mat.name()+".amount")!=null){
-							priceItemsAmount.put(priceItems.size()-1, plugin.getConfig().getInt("price.items."+mat.name()+".amount"));
-						}
-					}
-					
-				}
-			}
-		}
-		
-		prices = new ItemList(priceItems, priceItemsAmount, priceItemsData);
+		return new ItemList(items, itemsAmount, itemsData);
 	}
 
 	public ItemList getRewards() {

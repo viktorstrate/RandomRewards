@@ -13,3 +13,6 @@ price:
   items:
     GOLD_INGOT:
       amount: 3
+      data: 0
+rewardBlock:
+  
