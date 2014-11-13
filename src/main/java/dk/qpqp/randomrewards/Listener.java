@@ -34,13 +34,18 @@ public class Listener implements org.bukkit.event.Listener {
 			Block block = event.getClickedBlock();
 			if( block.getType()==configSetup.getRewardBlock().itemsType && block.getData()==configSetup.getRewardBlock().itemsData ){
 				
+				Player player = event.getPlayer();
+				
 				// Checks if the player has permission
-				if(Permissions.playerHasPerm(event.getPlayer(), Permissions.Permission.CANUSE));
+				if(!Permissions.playerHasPerm(player, Permissions.Permission.CANUSE)){
+					Message.playerMessage(ChatColor.RED+"You don't have permission.", player, plugin);
+					Message.playerMessage(ChatColor.RED+"You need permission node "+ChatColor.DARK_GREEN+"randomrewards.user", player, plugin);
+					return;
+				}
 				
 				event.setCancelled(true);
 				
 				// Checks if the player has the price it costs
-				Player player = event.getPlayer();
 				boolean hasThePrice = true;
 				for(int i = 0; i < configSetup.getPrices().size(); i++){
 					// if the player doesn't contains at least the the current item in the loop with the amount specified in the config.yml
