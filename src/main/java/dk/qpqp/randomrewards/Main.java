@@ -19,6 +19,8 @@ public final class Main extends JavaPlugin {
         
         configSetup = new ConfigSetup(plugin);
         
+        Permissions.setupMain(this);
+        
     }
 	
 	public void onDisable(){

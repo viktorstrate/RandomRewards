@@ -20,3 +20,6 @@ price:
 rewardBlock:
   WOOL:
       data: 2
+# Should the plugin use the permission randomrewards.user
+# If false the player don't need the permission to get random rewards
+usePermission: false
