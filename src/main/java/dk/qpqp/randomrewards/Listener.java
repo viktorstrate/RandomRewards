@@ -34,6 +34,9 @@ public class Listener implements org.bukkit.event.Listener {
 			Block block = event.getClickedBlock();
 			if( block.getType()==configSetup.getRewardBlock().itemsType && block.getData()==configSetup.getRewardBlock().itemsData ){
 				
+				// Checks if the player has permission
+				if(Permissions.playerHasPerm(event.getPlayer(), Permissions.Permission.CANUSE));
+				
 				event.setCancelled(true);
 				
 				// Checks if the player has the price it costs
