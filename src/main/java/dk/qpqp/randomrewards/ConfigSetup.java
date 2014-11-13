@@ -4,10 +4,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentWrapper;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 public class ConfigSetup {
@@ -126,6 +131,8 @@ public class ConfigSetup {
 			}
 		}
 		
+		
+		
 		if(itemAmount<=0){
 			Message.log("Item "+pathToItem+" loaded", plugin);
 			return new ConfigItem(item, itemAmount, itemData);
@@ -133,6 +140,24 @@ public class ConfigSetup {
 			Message.warning("Item "+pathToItem+" didn't load correctly, check the config", plugin);
 			return null;
 		}
+		
+	}
+	
+	public ArrayList<Enchantment> loadEnchantments(String pathToEnchantments, Material mat){
+		ArrayList<Enchantment> list = new ArrayList<Enchantment>();
+		Set<String> encKeys = plugin.getConfig().getKeys(true);
+		for(String str: encKeys){
+			if(str.startsWith(pathToEnchantments+".")){
+				for(Enchantment enc: Enchantment.values()){
+					if(str.endsWith(enc.getName())){
+						list.add(enc);
+						
+					}
+				}
+			}
+		}
+		return null;
+		
 		
 	}
 	
