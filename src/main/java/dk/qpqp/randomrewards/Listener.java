@@ -39,7 +39,7 @@ public class Listener implements org.bukkit.event.Listener {
 				// Checks if the player has permission
 				if(!Permissions.playerHasPerm(player, Permissions.Permission.CANUSE)){
 					Message.playerMessage(ChatColor.RED+"You don't have permission.", player, plugin);
-					Message.playerMessage(ChatColor.RED+"You need permission node "+ChatColor.DARK_GREEN+"randomrewards.user", player, plugin);
+					Message.playerMessage(ChatColor.RED+"You need node "+ChatColor.DARK_GREEN+"randomrewards.user", player, plugin);
 					return;
 				}
 				
