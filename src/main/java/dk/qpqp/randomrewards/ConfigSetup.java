@@ -8,11 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentWrapper;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 public class ConfigSetup {
@@ -103,10 +100,11 @@ public class ConfigSetup {
 	}
 	
 	public ConfigItem loadItem(String pathToItem){
-		// Loads items from the config
+		// Loads items from the config.yml
 		Material item = Material.STICK;
 		int itemAmount = -1;
 		Short itemData = 0;
+		ArrayList<ConfigEnchantment> enchantments = new ArrayList<ConfigEnchantment>();
         Set<String> keys = plugin.getConfig().getKeys(true);
 		for(String str: keys){
 			
@@ -117,13 +115,19 @@ public class ConfigSetup {
 					if( str.endsWith(mat.name()) ){
 						item = mat;
 						
+						// Loads the datavalue of the item(s)
 						if(plugin.getConfig().get(pathToItem+"."+mat.name()+".data")!=null){
 							itemData = (short) plugin.getConfig().getInt(pathToItem+"."+mat.name()+".data");
 						}
 						
+						// Loads the amount of items
 						if(plugin.getConfig().get(pathToItem+"."+mat.name()+".amount")!=null){
 							itemAmount = plugin.getConfig().getInt(pathToItem+"."+mat.name()+".amount");
 						}
+						
+						// Loads the enchantments
+						enchantments = loadEnchantments(pathToItem+"."+mat.name());
+						
 					}
 					
 				}
@@ -135,7 +139,7 @@ public class ConfigSetup {
 		
 		if(itemAmount<=0){
 			Message.log("Item "+pathToItem+" loaded", plugin);
-			return new ConfigItem(item, itemAmount, itemData);
+			return new ConfigItem(item, itemAmount, itemData, enchantments);
 		} else {
 			Message.warning("Item "+pathToItem+" didn't load correctly, check the config", plugin);
 			return null;
@@ -143,15 +147,16 @@ public class ConfigSetup {
 		
 	}
 	
-	public ArrayList<Enchantment> loadEnchantments(String pathToEnchantments, Material mat){
-		ArrayList<Enchantment> list = new ArrayList<Enchantment>();
+	public ArrayList<ConfigEnchantment> loadEnchantments(String pathToEnchantments){
+		ArrayList<ConfigEnchantment> list = new ArrayList<ConfigEnchantment>();
 		Set<String> encKeys = plugin.getConfig().getKeys(true);
 		for(String str: encKeys){
 			if(str.startsWith(pathToEnchantments+".")){
 				for(Enchantment enc: Enchantment.values()){
 					if(str.endsWith(enc.getName())){
-						list.add(enc);
-						
+						int level = 1;
+						level = plugin.getConfig().getInt(pathToEnchantments+"."+enc.getName()+".level");
+						list.add(new ConfigEnchantment(enc, level));
 					}
 				}
 			}
@@ -162,7 +167,7 @@ public class ConfigSetup {
 	}
 	
 	public ConfigItem loadBlock(String pathToBlock){
-		// Loads items from the config
+		// Loads items from the config.yml
 		Material item = Material.STONE;
 		Short itemData = -1;
         Set<String> keys = plugin.getConfig().getKeys(true);
