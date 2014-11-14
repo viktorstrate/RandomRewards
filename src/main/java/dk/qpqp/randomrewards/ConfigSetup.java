@@ -6,10 +6,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 public class ConfigSetup {
@@ -33,7 +37,7 @@ public class ConfigSetup {
         	e.printStackTrace();
         }
         
-        rewards = loadItems("rewards.items");
+        rewards = loadItems("rewards");
         prices = loadItems("price.items");
         rewardBlock = loadItem("rewardBlock");
         
@@ -63,44 +67,8 @@ public class ConfigSetup {
 	}
 	
 	public HashMap<Integer, ConfigItem> loadItems(String pathToItems){
-		// Loads items from the config
-		HashMap<Integer, Material> items = new HashMap<Integer, Material>();
-		HashMap<Integer, Integer> itemsAmount = new HashMap<Integer, Integer>();
-		HashMap<Integer, Short> itemsData = new HashMap<Integer, Short>();
-		HashMap<Integer, ArrayList<ConfigEnchantment>> enchantments = new HashMap<Integer, ArrayList<ConfigEnchantment>>();
-        Set<String> keys = plugin.getConfig().getKeys(true);
-		for(String str: keys){
-			
-			if(str.startsWith(pathToItems+".")){
-				
-				for(Material mat: Material.values()){
-					
-					if( str.endsWith(mat.name()) ){
-						Message.log("Found "+pathToItems+": "+mat.name()+" in config!", plugin);
-						items.put(items.size(), mat);
-						
-						if(plugin.getConfig().get(pathToItems+"."+mat.name()+".data")!=null){
-							itemsData.put(items.size()-1, (short) plugin.getConfig().getInt(pathToItems+"."+mat.name()+".data") );
-						}
-						
-						if(plugin.getConfig().get(pathToItems+"."+mat.name()+".amount")!=null){
-							itemsAmount.put(items.size()-1, plugin.getConfig().getInt(pathToItems+"."+mat.name()+".amount"));
-						}
-						
-						// Loads the enchantments
-						enchantments.put(items.size()-1, loadEnchantments(pathToItems+"."+mat.name()));
-					}
-					
-				}
-			}
-		}
-		
-		HashMap<Integer, ConfigItem> configItems = new HashMap<Integer, ConfigItem>();
-		for(int i = 0; i<items.size(); i++){
-			configItems.put(i, new ConfigItem(items.get(i), itemsAmount.get(i), itemsData.get(i), enchantments.get(i)));
-		}
-		
-		return configItems;
+
+		return new HashMap<Integer, ConfigItem>();
 	}
 	
 	public ConfigItem loadItem(String pathToItem){
@@ -210,6 +178,19 @@ public class ConfigSetup {
 		}
 		
 		
+	}
+	
+	public ArrayList<String> regxChecker(String theRegx, String str2Check){
+		ArrayList<String> list = new ArrayList<String>();
+		
+		List<ItemStack> lis = new ArrayList<ItemStack>();
+		lis.add(new ItemStack(Material.DIAMOND));
+		lis.add(new ItemStack(Material.STICK));
+		lis.add(new ItemStack(Material.GOLD_AXE));
+		plugin.getConfig().set("itm", lis);
+		plugin.saveConfig();
+		
+		return list;
 	}
 
 	public HashMap<Integer, ConfigItem> getRewards() {
