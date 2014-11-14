@@ -14,6 +14,7 @@ public final class Main extends JavaPlugin {
 	public ConfigSetup configSetup;
 	
 	public void onEnable() {
+		
         getServer().getPluginManager().registerEvents(new Listener(this), this);
         getLogger().info(pdf.getName()+" v. "+pdf.getVersion()+" has been enabled!");
         

@@ -62,11 +62,20 @@ public class Listener implements org.bukkit.event.Listener {
 					
 					HashMap<Integer, ConfigItem> rewards;
 					rewards = main.configSetup.getRewards();
+					
 					// Creates a random id
 					int randomId = (int) (Math.random()*rewards.size());
+					
 					// Gets the item through the random id
 					Material randomMaterial = rewards.get(randomId).itemsType;
 					ItemStack randomItem = new ItemStack(randomMaterial, rewards.get(randomId).itemsAmount, (short) rewards.get(randomId).itemsData);
+					
+					// Adds the enchantments to the item
+					for(ConfigEnchantment enc: rewards.get(randomId).enchantments){
+						Message.playerMessage("Added enchantment", player, plugin);
+						randomItem.addEnchantment(enc.enchantment, enc.level);
+					}
+					
 					// Gives the random generated item to the player
 					event.getPlayer().getInventory().addItem(randomItem);
 					event.getPlayer().updateInventory();

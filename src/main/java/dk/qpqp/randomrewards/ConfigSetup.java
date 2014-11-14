@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
 
 public class ConfigSetup {
@@ -44,7 +46,7 @@ public class ConfigSetup {
 	        copy(plugin.getResource("config.yml"), configFile);
 	    }
 	}
-	
+	// Is used to, copy the config.yml from this plugin.jar to the folder plugins/RandomRewards/
 	private void copy(InputStream in, File file){
 		try {
 	        OutputStream out = new FileOutputStream(file);
@@ -65,6 +67,7 @@ public class ConfigSetup {
 		HashMap<Integer, Material> items = new HashMap<Integer, Material>();
 		HashMap<Integer, Integer> itemsAmount = new HashMap<Integer, Integer>();
 		HashMap<Integer, Short> itemsData = new HashMap<Integer, Short>();
+		HashMap<Integer, ArrayList<ConfigEnchantment>> enchantments = new HashMap<Integer, ArrayList<ConfigEnchantment>>();
         Set<String> keys = plugin.getConfig().getKeys(true);
 		for(String str: keys){
 			
@@ -83,6 +86,9 @@ public class ConfigSetup {
 						if(plugin.getConfig().get(pathToItems+"."+mat.name()+".amount")!=null){
 							itemsAmount.put(items.size()-1, plugin.getConfig().getInt(pathToItems+"."+mat.name()+".amount"));
 						}
+						
+						// Loads the enchantments
+						enchantments.put(items.size()-1, loadEnchantments(pathToItems+"."+mat.name()));
 					}
 					
 				}
@@ -91,17 +97,18 @@ public class ConfigSetup {
 		
 		HashMap<Integer, ConfigItem> configItems = new HashMap<Integer, ConfigItem>();
 		for(int i = 0; i<items.size(); i++){
-			configItems.put(i, new ConfigItem(items.get(i), itemsAmount.get(i), itemsData.get(i)));
+			configItems.put(i, new ConfigItem(items.get(i), itemsAmount.get(i), itemsData.get(i), enchantments.get(i)));
 		}
 		
 		return configItems;
 	}
 	
 	public ConfigItem loadItem(String pathToItem){
-		// Loads items from the config
+		// Loads items from the config.yml
 		Material item = Material.STICK;
 		int itemAmount = -1;
 		Short itemData = 0;
+		ArrayList<ConfigEnchantment> enchantments = new ArrayList<ConfigEnchantment>();
         Set<String> keys = plugin.getConfig().getKeys(true);
 		for(String str: keys){
 			
@@ -112,13 +119,19 @@ public class ConfigSetup {
 					if( str.endsWith(mat.name()) ){
 						item = mat;
 						
+						// Loads the datavalue of the item(s)
 						if(plugin.getConfig().get(pathToItem+"."+mat.name()+".data")!=null){
 							itemData = (short) plugin.getConfig().getInt(pathToItem+"."+mat.name()+".data");
 						}
 						
+						// Loads the amount of items
 						if(plugin.getConfig().get(pathToItem+"."+mat.name()+".amount")!=null){
 							itemAmount = plugin.getConfig().getInt(pathToItem+"."+mat.name()+".amount");
 						}
+						
+						// Loads the enchantments
+						enchantments = loadEnchantments(pathToItem+"."+mat.name());
+						
 					}
 					
 				}
@@ -126,9 +139,11 @@ public class ConfigSetup {
 			}
 		}
 		
+		
+		
 		if(itemAmount<=0){
 			Message.log("Item "+pathToItem+" loaded", plugin);
-			return new ConfigItem(item, itemAmount, itemData);
+			return new ConfigItem(item, itemAmount, itemData, enchantments);
 		} else {
 			Message.warning("Item "+pathToItem+" didn't load correctly, check the config", plugin);
 			return null;
@@ -136,8 +151,35 @@ public class ConfigSetup {
 		
 	}
 	
+	// Loads enchantments from the config, function used by function loadItems() and loadItem()
+	public ArrayList<ConfigEnchantment> loadEnchantments(String pathToEnchantments){
+		ArrayList<ConfigEnchantment> list = new ArrayList<ConfigEnchantment>();
+		
+		// A key with all the nodes in the config.yml
+		Set<String> encKeys = plugin.getConfig().getKeys(true);
+		
+		// Loops through the nodes in the config.yml
+		for(String str: encKeys){
+			// If found the path to the enchantments
+			if(str.startsWith(pathToEnchantments+".")){
+				// Loops through all the avaliable enchantment types
+				for(Enchantment enc: Enchantment.values()){
+					// If found one matching the one(s) in the config.yml
+					if(str.endsWith(enc.getName())){
+						// Sends message and adds it to the list
+						Message.log("With enchantment: "+enc.getName(), plugin);
+						int level = 1;
+						level = plugin.getConfig().getInt(pathToEnchantments+"."+enc.getName()+".level");
+						list.add(new ConfigEnchantment(enc, level));
+					}
+				}
+			}
+		}
+		return list;
+	}
+	
 	public ConfigItem loadBlock(String pathToBlock){
-		// Loads items from the config
+		// Loads items from the config.yml
 		Material item = Material.STONE;
 		Short itemData = -1;
         Set<String> keys = plugin.getConfig().getKeys(true);
