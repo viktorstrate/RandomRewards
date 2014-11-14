@@ -1,12 +1,22 @@
+### RANDOM REWARDS CONFIG.YML ###
+# To find help, please read the wiki
+# https://github.com/viktorstrate/RandomRewards/wiki/Config
+
 # The rewards the player should be able to get.
 rewards:
   items:
     DIAMOND_SWORD:
       amount: 1
       data: 0
+      FIRE_ASPECT:
+        level: 2
     DIAMOND_HELMET:
       amount: 1
       data: 0
+      DURABILITY:
+        level: 1
+      PROTECTION_ENVIRONMENTAL:
+        level: 2
     WOOL:
       data: 2
       amount: 1
