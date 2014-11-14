@@ -4,7 +4,7 @@ A minecraft plugin, to give random rewards by rightclicking on a custom block.<b
 Check the wiki for more info and help https://github.com/viktorstrate/RandomRewards/wiki
 <br><br>
 Download here: https://github.com/viktorstrate/RandomRewards/tree/master/out
-Right-click the version you wan't and press **Save link as**.
+Left-click it and press **View Raw** to download
 <br><br>
 Got any suggestions or features you can contact me at <i>viktorstrate@gmail.com</i>
 
