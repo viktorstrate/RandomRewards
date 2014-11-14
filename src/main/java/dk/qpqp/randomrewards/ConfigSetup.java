@@ -46,7 +46,7 @@ public class ConfigSetup {
 	        copy(plugin.getResource("config.yml"), configFile);
 	    }
 	}
-	
+	// Is used to, copy the config.yml from this plugin.jar to the folder plugins/RandomRewards/
 	private void copy(InputStream in, File file){
 		try {
 	        OutputStream out = new FileOutputStream(file);
@@ -67,6 +67,7 @@ public class ConfigSetup {
 		HashMap<Integer, Material> items = new HashMap<Integer, Material>();
 		HashMap<Integer, Integer> itemsAmount = new HashMap<Integer, Integer>();
 		HashMap<Integer, Short> itemsData = new HashMap<Integer, Short>();
+		HashMap<Integer, ArrayList<ConfigEnchantment>> enchantments = new HashMap<Integer, ArrayList<ConfigEnchantment>>();
         Set<String> keys = plugin.getConfig().getKeys(true);
 		for(String str: keys){
 			
@@ -85,6 +86,9 @@ public class ConfigSetup {
 						if(plugin.getConfig().get(pathToItems+"."+mat.name()+".amount")!=null){
 							itemsAmount.put(items.size()-1, plugin.getConfig().getInt(pathToItems+"."+mat.name()+".amount"));
 						}
+						
+						// Loads the enchantments
+						enchantments.put(items.size()-1, loadEnchantments(pathToItems+"."+mat.name()));
 					}
 					
 				}
@@ -93,7 +97,7 @@ public class ConfigSetup {
 		
 		HashMap<Integer, ConfigItem> configItems = new HashMap<Integer, ConfigItem>();
 		for(int i = 0; i<items.size(); i++){
-			configItems.put(i, new ConfigItem(items.get(i), itemsAmount.get(i), itemsData.get(i)));
+			configItems.put(i, new ConfigItem(items.get(i), itemsAmount.get(i), itemsData.get(i), enchantments.get(i)));
 		}
 		
 		return configItems;
@@ -147,13 +151,23 @@ public class ConfigSetup {
 		
 	}
 	
+	// Loads enchantments from the config, function used by function loadItems() and loadItem()
 	public ArrayList<ConfigEnchantment> loadEnchantments(String pathToEnchantments){
 		ArrayList<ConfigEnchantment> list = new ArrayList<ConfigEnchantment>();
+		
+		// A key with all the nodes in the config.yml
 		Set<String> encKeys = plugin.getConfig().getKeys(true);
+		
+		// Loops through the nodes in the config.yml
 		for(String str: encKeys){
+			// If found the path to the enchantments
 			if(str.startsWith(pathToEnchantments+".")){
+				// Loops through all the avaliable enchantment types
 				for(Enchantment enc: Enchantment.values()){
+					// If found one matching the one(s) in the config.yml
 					if(str.endsWith(enc.getName())){
+						// Sends message and adds it to the list
+						Message.log("With enchantment: "+enc.getName(), plugin);
 						int level = 1;
 						level = plugin.getConfig().getInt(pathToEnchantments+"."+enc.getName()+".level");
 						list.add(new ConfigEnchantment(enc, level));
@@ -161,9 +175,7 @@ public class ConfigSetup {
 				}
 			}
 		}
-		return null;
-		
-		
+		return list;
 	}
 	
 	public ConfigItem loadBlock(String pathToBlock){

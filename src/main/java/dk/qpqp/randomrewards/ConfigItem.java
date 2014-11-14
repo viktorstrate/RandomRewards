@@ -17,6 +17,7 @@ public class ConfigItem {
 		this.itemsType = itemsType;
 		this.itemsAmount = itemsAmount;
 		this.itemsData = itemsData;
+		enchantments = new ArrayList<ConfigEnchantment>();
 	}
 	
 	public ConfigItem(Material itemsType, int itemsAmount, Short itemsData, ArrayList<ConfigEnchantment> enchantments){
