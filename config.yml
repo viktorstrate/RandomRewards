@@ -4,32 +4,17 @@
 
 # The rewards the player should be able to get.
 rewards:
-  items:
-    DIAMOND_SWORD:
-      amount: 1
-      data: 0
-      FIRE_ASPECT:
-        level: 2
-    DIAMOND_HELMET:
-      amount: 1
-      data: 0
-      DURABILITY:
-        level: 1
-      PROTECTION_ENVIRONMENTAL:
-        level: 2
-    WOOL:
-      data: 2
-      amount: 1
+  - 276 1 sharpness 2 unbreaking 1
+  - 310
+  - 322 1 1
+  - 320 3
+  
 # The price it costs every time the player right-clicks the reward block
 price:
-  items:
-    GOLD_INGOT:
-      amount: 3
-      data: 0
-# The block the player has to right-click to trigger the 
-rewardBlock:
-  WOOL:
-      data: 2
+  - 266 6
+# The block the player has to right-click to trigger the
+# Default is black wool
+rewardBlock: 35 1 15
 # Should the plugin use the permission randomrewards.user
 # If false the player don't need the permission to get random rewards
 usePermission: false
