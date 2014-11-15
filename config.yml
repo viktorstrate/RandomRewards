@@ -4,22 +4,10 @@
 
 # The rewards the player should be able to get.
 rewards:
-  items:
-    DIAMOND_SWORD:
-      amount: 1
-      data: 0
-      FIRE_ASPECT:
-        level: 2
-    DIAMOND_HELMET:
-      amount: 1
-      data: 0
-      DURABILITY:
-        level: 1
-      PROTECTION_ENVIRONMENTAL:
-        level: 2
-    WOOL:
-      data: 2
-      amount: 1
+  - 10
+  - 33
+  - ss22
+  
 # The price it costs every time the player right-clicks the reward block
 price:
   items:
