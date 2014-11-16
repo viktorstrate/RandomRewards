@@ -8,7 +8,10 @@ public class Permissions {
 		// All the admin commands
 		ADMIN,
 		// Can use the random reward block
-		CANUSE
+		CANUSE,
+		ADD_REWARDS,
+		REMOVE_REWARDS,
+		LIST_REWARDS
 	}
 	private static Main main;
 	
@@ -28,12 +31,23 @@ public class Permissions {
 				return true;
 			} else {
 				// Else check if player has the permission
-				if(player.hasPermission("randomrewards.user")){
+				if(player.hasPermission("randomrewards.user.canuse")){
 					return true;
 				} else return false;
 			}
+		case ADD_REWARDS:
+			if(player.hasPermission("randomrewards.admin.add")){
+				return true;
+			} else return false;
+		case REMOVE_REWARDS:
+			if(player.hasPermission("randomrewards.admin.remove")){
+				return true;
+			} else return false;
+		case LIST_REWARDS:
+			if(player.hasPermission("randomrewards.user.list")){
+				return true;
+			} else return false;
+		default: return false;
 		}
-		
-		return false;
 	}
 }

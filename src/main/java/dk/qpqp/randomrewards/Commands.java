@@ -1,9 +1,6 @@
 package dk.qpqp.randomrewards;
 
-import static org.bukkit.ChatColor.DARK_GRAY;
-import static org.bukkit.ChatColor.DARK_GREEN;
-import static org.bukkit.ChatColor.GRAY;
-import static org.bukkit.ChatColor.GREEN;
+import static org.bukkit.ChatColor.*;
 
 import java.util.Map.Entry;
 import java.util.Set;
@@ -13,6 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+
+import dk.qpqp.randomrewards.Permissions.Permission;
 
 public class Commands {
 	public static boolean onCommand(CommandSender sender, Command cmd, String label, String[] args, Main main) {
@@ -29,17 +28,29 @@ public class Commands {
 					}
 
 					if (args[1].equalsIgnoreCase("add")) {
+						if(!Permissions.playerHasPerm(player, Permission.ADD_REWARDS)){
+							showPermissionMessage(player, main.plugin);
+							return false;
+						}
 						setReward(player, main.plugin, main);
 						Message.playerMessage(GREEN+"Item added", player, main.plugin);
 						return true;
 					}
 
 					if (args[1].equalsIgnoreCase("list")) {
+						if(!Permissions.playerHasPerm(player, Permission.LIST_REWARDS)){
+							showPermissionMessage(player, main.plugin);
+							return false;
+						}
 						showRewardList(player, main);
 						return true;
 					}
 					
 					if (args[1].equalsIgnoreCase("remove")) {
+						if(!Permissions.playerHasPerm(player, Permission.REMOVE_REWARDS)){
+							showPermissionMessage(player, main.plugin);
+							return false;
+						}
 						if(args.length==2){
 							Message.playerMessage(GREEN+"Usage "+DARK_GREEN+"/rr reward remove [ID]", player, main.plugin);
 							Message.playerMessage(GRAY+"Type "+DARK_GRAY+"/rr reward list"+GRAY+" to find the id", player, main.plugin);
@@ -57,6 +68,10 @@ public class Commands {
 			}
 		}
 		return false;
+	}
+	
+	private static void showPermissionMessage(Player player, Plugin plugin){
+		Message.playerMessage(RED+"You don't have permission to use that command", player, plugin);
 	}
 
 	private static void showHelp(Player player, Plugin plugin) {
