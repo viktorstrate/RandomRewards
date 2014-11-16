@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.UnhandledException;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -40,11 +41,8 @@ public class ConfigSetup {
 			e.printStackTrace();
 		}
 
-		rewardList = plugin.getConfig().getStringList("rewards");
-		priceList = plugin.getConfig().getStringList("price");
-		
-		rewards = loadItems(rewardList);
-		prices = loadItems(priceList);
+		updateConfig();
+
 		rewardBlock = new ConfigItem(Material.WOOL, 1, (short) 3);
 		
 
@@ -240,10 +238,30 @@ public class ConfigSetup {
 		list.add(itemString);
 		plugin.getConfig().set("rewards", list);
 		plugin.saveConfig();
-		plugin.reloadConfig();
+		updateConfig();
+	}
+	
+	public boolean removeReward(int id){
+		try{
+		List<String> list = plugin.getConfig().getStringList("rewards");
 		
+		list.remove(id-1);
+		plugin.getConfig().set("rewards", list);
+		plugin.saveConfig();
+		updateConfig();
+		} catch(UnhandledException e){
+			return false;
+		}
+		return true;
+	}
+	
+	private void updateConfig(){
+		plugin.reloadConfig();
 		rewardList = plugin.getConfig().getStringList("rewards");
+		priceList = plugin.getConfig().getStringList("price");
+		
 		rewards = loadItems(rewardList);
+		prices = loadItems(priceList);
 	}
 
 	public HashMap<Integer, ConfigItem> getRewards() {
