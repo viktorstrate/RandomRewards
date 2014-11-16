@@ -21,4 +21,12 @@ public class Message {
 	public static void playerMessage(String message, Player player, Plugin plugin){
 		player.sendMessage(pluginTag+" "+ChatColor.WHITE+message);
 	}
+	
+	public static void playerMessage(String message, Player player, Plugin plugin, boolean showTag){
+		if(showTag){
+			playerMessage(message, player, plugin);
+		} else {
+			player.sendMessage(message);
+		}
+	}
 }

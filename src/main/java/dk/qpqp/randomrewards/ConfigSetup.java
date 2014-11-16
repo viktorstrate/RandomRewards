@@ -6,12 +6,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 public class ConfigSetup {
@@ -23,6 +25,9 @@ public class ConfigSetup {
 
 	private HashMap<Integer, ConfigItem> rewards, prices;
 	private ConfigItem rewardBlock;
+	
+	List<String> rewardList = null;
+	List<String> priceList = null;
 
 	public ConfigSetup(Plugin plugin) {
 		this.plugin = plugin;
@@ -35,13 +40,13 @@ public class ConfigSetup {
 			e.printStackTrace();
 		}
 
-		List<String> rewardList = plugin.getConfig().getStringList("rewards");
-		List<String> priceList = plugin.getConfig().getStringList("price");
+		rewardList = plugin.getConfig().getStringList("rewards");
+		priceList = plugin.getConfig().getStringList("price");
+		
 		rewards = loadItems(rewardList);
 		prices = loadItems(priceList);
 		rewardBlock = new ConfigItem(Material.WOOL, 1, (short) 3);
 		
-		Message.log("REWARDS"+rewards.get(0).enchantmentsLevel.get(0), plugin);
 
 	}
 
@@ -157,7 +162,6 @@ public class ConfigSetup {
 
 			regexMatcherEncType.find();
 			EnchantmentTypes.put(EnchantmentTypes.size(), ConfigItem.getEnchantmentNames().get(regexMatcherEncType.group().trim()));
-			Message.log("DEBUG "+EnchantmentTypes.get(0).getName(), plugin);
 			
 
 			// Find the level
@@ -215,6 +219,31 @@ public class ConfigSetup {
 			return null;
 		}
 
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void addReward(ItemStack item){
+		String enchantmentString = "";
+		Set<Enchantment> key = item.getEnchantments().keySet();
+		for(Enchantment enc: key){
+			for(Entry<String, Enchantment> encType: ConfigItem.getEnchantmentNames().entrySet()){
+				if(enc.equals(encType.getValue())){
+					enchantmentString += encType.getKey()+" "+item.getEnchantmentLevel(enc)+" ";
+				}
+			}
+			
+		}
+		String itemString = item.getTypeId()+" "+item.getAmount()+" "+item.getData().getData()+" "+enchantmentString;
+		Message.log("Added reward item: "+itemString, plugin);
+		
+		List<String> list = plugin.getConfig().getStringList("rewards");
+		list.add(itemString);
+		plugin.getConfig().set("rewards", list);
+		plugin.saveConfig();
+		plugin.reloadConfig();
+		
+		rewardList = plugin.getConfig().getStringList("rewards");
+		rewards = loadItems(rewardList);
 	}
 
 	public HashMap<Integer, ConfigItem> getRewards() {

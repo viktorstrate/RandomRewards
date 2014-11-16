@@ -1,5 +1,7 @@
 package dk.qpqp.randomrewards;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,5 +28,10 @@ public final class Main extends JavaPlugin {
 	
 	public void onDisable(){
 		getLogger().info(pdf.getName()+" v. "+pdf.getVersion()+" has been disabled!");
+	}
+	
+
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		return Commands.onCommand(sender, cmd, label, args, this);
 	}
 }
