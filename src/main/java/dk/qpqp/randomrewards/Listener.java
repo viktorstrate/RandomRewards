@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -42,7 +43,6 @@ public class Listener implements org.bukkit.event.Listener {
 					Message.playerMessage(ChatColor.RED+"You need node "+ChatColor.DARK_GREEN+"randomrewards.user", player, plugin);
 					return;
 				}
-				
 				event.setCancelled(true);
 				
 				// Checks if the player has the price it costs
@@ -62,15 +62,29 @@ public class Listener implements org.bukkit.event.Listener {
 					
 					HashMap<Integer, ConfigItem> rewards;
 					rewards = main.configSetup.getRewards();
+					
 					// Creates a random id
 					int randomId = (int) (Math.random()*rewards.size());
+					
 					// Gets the item through the random id
 					Material randomMaterial = rewards.get(randomId).itemsType;
 					ItemStack randomItem = new ItemStack(randomMaterial, rewards.get(randomId).itemsAmount, (short) rewards.get(randomId).itemsData);
+					
+					
+					// Adds the enchantments to the item
+					for(int i = 0; i < rewards.get(randomId).enchantmentsType.size(); i++){
+						Enchantment enc = rewards.get(randomId).enchantmentsType.get(i);
+						int level = rewards.get(randomId).enchantmentsLevel.get(i);
+						randomItem.addEnchantment(enc, level);
+					}
+					
 					// Gives the random generated item to the player
 					event.getPlayer().getInventory().addItem(randomItem);
 					event.getPlayer().updateInventory();
-					Message.playerMessage("Got a "+randomMaterial.name()+" and randomid: "+randomId+", and amount of items: "+rewards.size(), event.getPlayer(), plugin);
+					if(randomItem.getEnchantments().size()==0)
+						Message.playerMessage("Got a "+randomMaterial.name(), player, plugin);
+					else
+						Message.playerMessage("Got an enchanted "+randomMaterial.name(), player, plugin);
 				} else{
 					Message.playerMessage(ChatColor.RED+"You don't have enough to do that, it costs", player, plugin);
 					for(int i = 0; i < configSetup.getPrices().size(); i++){
