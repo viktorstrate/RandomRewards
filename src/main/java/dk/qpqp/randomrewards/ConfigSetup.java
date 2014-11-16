@@ -42,8 +42,10 @@ public class ConfigSetup {
 		}
 
 		updateConfig();
+		
+		String rewardBlockString = plugin.getConfig().getString("rewardBlock");
 
-		rewardBlock = new ConfigItem(Material.WOOL, 1, (short) 3);
+		rewardBlock = loadBlock(rewardBlockString);
 		
 
 	}
@@ -175,48 +177,48 @@ public class ConfigSetup {
 
 		return new ConfigItem(Material.getMaterial(id), amount, datavalue, EnchantmentTypes, EncnantmentLevel);
 	}
+	
+	@SuppressWarnings("deprecation")
+	public ConfigItem loadBlock(String value) {
+		String regex = "(\\d)+";
+		Matcher regexMatcher = regexChecker(regex, value);
+
+		int id = 0;
+		Short datavalue = 0;
+
+		int idEnd = 0;
+		while (regexMatcher.find()) {
+			if (regexMatcher.group().length() != 0) {
+				if (regexMatcher.start() == 0) {
+
+					try {
+						id = Integer.parseInt(regexMatcher.group().trim());
+						Message.log("Item: " + Material.getMaterial(id), plugin);
+					} catch (NumberFormatException e) {
+					}
+
+					idEnd = regexMatcher.end();
+				}
+
+				if (regexMatcher.start() == idEnd + 1) {
+
+					try {
+						datavalue = (short) Integer.parseInt(regexMatcher.group().trim());
+					} catch (NumberFormatException e) {
+					}
+				}
+			}
+		}
+		
+		
+		return new ConfigItem(Material.getMaterial(id), 1, datavalue, new HashMap<Integer, Enchantment>(), new HashMap<Integer, Integer>());
+	}
 
 	private Matcher regexChecker(String theRegx, String str2Check) {
 		Pattern checkRegex = Pattern.compile(theRegx);
 		Matcher regexMatcher = checkRegex.matcher(str2Check);
 
 		return regexMatcher;
-	}
-
-	public ConfigItem loadBlock(String pathToBlock) {
-		// Loads items from the config.yml
-		Material item = Material.STONE;
-		Short itemData = -1;
-		Set<String> keys = plugin.getConfig().getKeys(true);
-		for (String str : keys) {
-
-			if (str.startsWith(pathToBlock + ".")) {
-
-				for (Material mat : Material.values()) {
-
-					if (str.endsWith(mat.name())) {
-						item = mat;
-
-						if (plugin.getConfig().get(
-								pathToBlock + "." + mat.name() + ".data") != null) {
-							itemData = (short) plugin.getConfig().getInt(
-									pathToBlock + "." + mat.name() + ".data");
-						}
-					}
-
-				}
-				break;
-			}
-		}
-		if (itemData >= 0) {
-			Message.log("Block " + pathToBlock + " loaded", plugin);
-			return new ConfigItem(item, 1, itemData);
-		} else {
-			Message.warning("Block " + pathToBlock
-					+ " didn't load correctly, check the config", plugin);
-			return null;
-		}
-
 	}
 	
 	@SuppressWarnings("deprecation")
