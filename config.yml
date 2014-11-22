@@ -14,7 +14,7 @@ price:
   - 266 6
 # The block the player has to right-click to trigger the
 # Default is black wool
-rewardBlock: 35 1 15
+rewardBlock: 35 15
 # Should the plugin use the permission randomrewards.user
 # If false the player don't need the permission to get random rewards
 usePermission: false

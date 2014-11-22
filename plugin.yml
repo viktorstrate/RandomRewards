@@ -1,6 +1,6 @@
 name: RandomRewards
 main: dk.qpqp.randomrewards.Main
-version: 2.1
+version: 2.2
 commands:
    randomrewards:
       description: Random Rewards

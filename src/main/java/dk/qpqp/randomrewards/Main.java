@@ -1,10 +1,13 @@
 package dk.qpqp.randomrewards;
 
+import java.io.IOException;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 public final class Main extends JavaPlugin {
 	
@@ -23,6 +26,14 @@ public final class Main extends JavaPlugin {
         configSetup = new ConfigSetup(plugin);
         
         Permissions.setupMain(this);
+
+        try {
+            Metrics metrics = new Metrics(this);
+            metrics.start();
+        } catch (IOException e) {
+            // Failed to submit the stats :-(
+        	Message.warning("COULDN'T LOAD METRICS", plugin);
+        }
         
     }
 	
